@@ -23,8 +23,6 @@ function _writeCharacteristic(value) {
         return this.device.gatt.getPrimaryService("0000ffe1-0000-1000-8000-00805f9b34fb")
         .then(service => service.getCharacteristic("0000ffe3-0000-1000-8000-00805f9b34fb"))
             .then(characteristic => characteristic.writeValue(value));
-            // .then(service => service.getCharacteristic(this.config.charateristic()))
-            // .then(characteristic => characteristic.writeValue(value));
     }
     
 function processMotor(valueM1, valueM2) {
@@ -46,10 +44,6 @@ function processColor(red,blue,green){
         
     }
 function _genericControl(type, port, slot, value) {
-        /*
-        ff 55 len idx action device port  slot  data a
-        0  1  2   3   4      5      6     7     8
-        */
         // Static values
         var buf = new ArrayBuffer(16);
         var bufView = new Uint16Array(buf);
@@ -75,11 +69,6 @@ function _genericControl(type, port, slot, value) {
 
         switch (type) {
             case TYPE_MOTOR:
-                // Motor M1
-                // ff:55  09:00  02:0a  09:64  00:00  00:00  0a"
-                // 0x55ff;0x0009;0x0a02;0x0964;0x0000;0x0000;0x000a;0x0000;
-                // Motor M2
-                // ff:55:09:00:02:0a:0a:64:00:00:00:00:0a                
                 var tempValue = value < 0 ? (parseInt("ffff", 16) + Math.max(-255, value)) : Math.min(255, value);
                 byte7 = tempValue & 0x00ff;
                 byte8 = 0x00;
@@ -199,13 +188,7 @@ function connect_AIAndmBot() {
   }
 
   let options = {};
-  // if (document.querySelector('#allDevices').checked) {
-  //   options.acceptAllDevices = true;
-  //   options.optionalServices = ['0000ffe1-0000-1000-8000-00805f9b34fb'];
-  // } else {
-  //   options.filters = filters;
-  // }
-
+  
   options.acceptAllDevices = true;
   options.optionalServices = ['0000ffe1-0000-1000-8000-00805f9b34fb'];
 
@@ -229,7 +212,6 @@ function connect_AIAndmBot() {
 
 function mBot_color() {
     processColor(2,5,8);
-    // processMotor(255, 255);
 }
 
 function mBot_Go() {
@@ -280,13 +262,7 @@ function connect_mBot() {
   }
 
   let options = {};
-  // if (document.querySelector('#allDevices').checked) {
-  //   options.acceptAllDevices = true;
-  //   options.optionalServices = ['0000ffe1-0000-1000-8000-00805f9b34fb'];
-  // } else {
-  //   options.filters = filters;
-  // }
-
+  
   options.acceptAllDevices = true;
   options.optionalServices = ['0000ffe1-0000-1000-8000-00805f9b34fb'];
 
@@ -304,74 +280,3 @@ function connect_mBot() {
     console.log('Argh! ' + error);
   });
 }
-
-////////////////////////////////////
-
-// // More API functions here:
-// // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
-
-// // the link to your model provided by Teachable Machine export panel
-// const URL = "./my_model/";
-
-// let model, webcam, labelContainer, maxPredictions;
-// let count_value = 0;
-// let one_shoot = false;
-
-// // Load the image model and setup the webcam
-// async function init() {
-//     const modelURL = URL + "model.json";
-//     const metadataURL = URL + "metadata.json";
-
-//     // load the model and metadata
-//     // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
-//     // or files from your local hard drive
-//     // Note: the pose library adds "tmImage" object to your window (window.tmImage)
-//     model = await tmImage.load(modelURL, metadataURL);
-//     maxPredictions = model.getTotalClasses();
-
-//     // Convenience function to setup a webcam
-//     const flip = true; // whether to flip the webcam
-//     webcam = new tmImage.Webcam(500, 500, flip); // width, height, flip
-//     await webcam.setup(); // request access to the webcam
-//     await webcam.play();
-//     window.requestAnimationFrame(loop);
-
-//     // append elements to the DOM
-//     document.getElementById("webcam-container").appendChild(webcam.canvas);
-//     labelContainer = document.getElementById("label-container");
-//     for (let i = 0; i < maxPredictions; i++) { // and class labels
-//         labelContainer.appendChild(document.createElement("div"));
-//     }
-// }
-
-// async function loop() {
-//     webcam.update(); // update the webcam frame
-//     await predict();
-//     window.requestAnimationFrame(loop);
-// }
-
-// // run the webcam image through the image model
-// async function predict() {
-//     // predict can take in an image, video or canvas html element
-//     const prediction = await model.predict(webcam.canvas);
-//     for (let i = 0; i < maxPredictions; i++) {
-//         const classPrediction =
-//             prediction[i].className + ": " + prediction[i].probability.toFixed(2);
-//             let value = prediction[i].probability.toFixed(2);
-//             if(i==0 && value >= 0.99)
-//             {
-//                 // if(!one_shoot)
-//                 // {
-                    
-//                 //     one_shoot = true;
-//                 // }
-//                 onButtonClick_Left();
-//             }
-//             if(i==1 && value >= 0.99)
-//             {
-//                 onButtonClick_Right();
-//             }
-//         labelContainer.childNodes[i].innerHTML = classPrediction;
-//         // count_value++;
-//     }
-// }

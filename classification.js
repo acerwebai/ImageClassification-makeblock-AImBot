@@ -1,6 +1,4 @@
-// const URL = "./my_model/";
-// const URL = "./classification_model_20200311/";
-const URL = "./classification_model_20200311_2/";
+const URL = "./CF_MODEL/"
 
 let model, webcam, labelContainer, maxPredictions;
 let count_value = 0;
@@ -19,9 +17,9 @@ async function classification_init() {
     maxPredictions = model.getTotalClasses();
 
     // Convenience function to setup a webcam
-    const flip = true; // whether to flip the webcam
-    webcam = new tmImage.Webcam(500, 500, flip); // width, height, flip
-    await webcam.setup(); // request access to the webcam
+    const flip = true;
+    webcam = new tmImage.Webcam(500, 500, flip);
+    await webcam.setup();
     await webcam.play();
     window.requestAnimationFrame(loop);
 
@@ -34,7 +32,7 @@ async function classification_init() {
 }
 
 async function loop() {
-    webcam.update(); // update the webcam frame
+    webcam.update();
     await predict();
     window.requestAnimationFrame(loop);
 }
@@ -47,19 +45,7 @@ async function predict() {
         const classPrediction =
             prediction[i].className + ": " + prediction[i].probability.toFixed(2);
             let value = prediction[i].probability.toFixed(2);
-            // if(i==0 && value >= 0.99)
-            // {
-            //     // if(!one_shoot)
-            //     // {
-                    
-            //     //     one_shoot = true;
-            //     // }
-            //     mBot_Left();
-            // }
-            // if(i==1 && value >= 0.99)
-            // {
-            //     mBot_Right();
-            // }
+            
             if(prediction[i].className=="Right" && value >= 0.99)
             {
                 mBot_Right();
@@ -86,6 +72,5 @@ async function predict() {
             }
 
         labelContainer.childNodes[i].innerHTML = classPrediction;
-        // count_value++;
     }
 }
