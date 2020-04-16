@@ -3,6 +3,10 @@ ImageClassification makeblock AImBot.
 Use AI Image Classification to control makeblock mBot.
 
 # Standard Operation Procedure
+## Device Requirement  
+- makebloak mbot
+- Notebook or Chromebook
+
 ## Image Classification
 Use Google Teachable Machine to training image classification AI model.  
 https://teachablemachine.withgoogle.com/train/image  
@@ -26,6 +30,9 @@ You can do classification for the 5 classes which you defined.
 ## Control the mBot
 Download the "webbluetooth_mBot.js" as mBot control lib and include in your project.  
 Define different action for 5 classification, and do the determination in the function "predict()" of classification.js.  
-Finial, use webblue to connect the mBot, please reference in the function "connect_mBot()" of webbluetooth_mBot.js.    
+Finial, use webbluetooth to connect the mBot, please reference in the function "connect_mBot()" of webbluetooth_mBot.js.    
 
+
+## Use
+Enable AI Image Classification and Connect the mBot with webbluetooth(select the makeblockXXXXXXXX to pair).  
 When all thing done, you can control the mBot via image classification.  
